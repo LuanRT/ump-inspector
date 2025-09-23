@@ -6,15 +6,23 @@
   "description": "A browser extension for inspecting and debugging UMP requests on YouTube.",
   "content_scripts": [
     {
-      "matches": ["*://*.youtube.com/*" ],
-      "js": ["dist/content.bundle.js"],
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "js": [
+        "dist/content.bundle.js"
+      ],
       "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["dist/injected.bundle.js"],
-      "matches": ["*://*.youtube.com/*" ]
+      "resources": [
+        "dist/injected.bundle.js"
+      ],
+      "matches": [
+        "*://*.youtube.com/*"
+      ]
     }
   ]
 }
