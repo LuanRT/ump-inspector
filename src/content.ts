@@ -1,7 +1,8 @@
 function injectScript(): void {
   try {
     const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('dist/injected.bundle.js');
+    const runtime = (browser ?? chrome).runtime;
+    script.src = runtime.getURL('dist/injected.bundle.js');
     (document.head || document.documentElement).appendChild(script);
     script.onload = () => script.remove();
   } catch (e) {
