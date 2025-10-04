@@ -11,7 +11,7 @@ To install this extension, you need to load it as an unpacked extension in a Chr
 
 1.  Download the latest `ump-inspector-vX.X.X.zip` from the [releases page](https://github.com/LuanRT/ump-inspector/releases).
 2.  Unzip the downloaded file.
-3.  Open your browser and navigate to the extensions page (e.g., `chrome://extensions` or `edge://extensions`).
+3.  Open your browser and navigate to the extensions page (e.g., `chrome://extensions`, `edge://extensions`, or `about:addons` for Mozilla-based browsers).
 4.  Enable "Developer mode".
 5.  Click on "Load unpacked" and select the directory where you unzipped the files.
 
