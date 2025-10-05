@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.0...ump-inspector-v1.1.1) (2025-10-05)
+
+
+### Bug Fixes
+
+* **content.ts:** Ref error when detecting runtime ([979d6ce](https://github.com/LuanRT/ump-inspector/commit/979d6ced2193602c4aed1dbbb34910922eab43fa))
+
 ## [1.1.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.0.0...ump-inspector-v1.1.0) (2025-10-04)
 
 
