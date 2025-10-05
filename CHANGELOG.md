@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.1...ump-inspector-v1.1.2) (2025-10-05)
+
+
+### Bug Fixes
+
+* **content.ts:** Remove unneeded type (oops!) ([d4d9bd0](https://github.com/LuanRT/ump-inspector/commit/d4d9bd036188ae42f4f36bedebe45f455a9654b5))
+
 ## [1.1.1](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.0...ump-inspector-v1.1.1) (2025-10-05)
 
 
