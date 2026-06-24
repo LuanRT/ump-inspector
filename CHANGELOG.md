@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.0.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.2...ump-inspector-v2.0.0) (2026-06-24)
+
+
+### ⚠ BREAKING CHANGES
+
+* Add a proper UI and migrate to Vite ([#19](https://github.com/LuanRT/ump-inspector/issues/19))
+
+### Bug Fixes
+
+* **package:** Change name casing to lowercase ([5d41670](https://github.com/LuanRT/ump-inspector/commit/5d41670053a06a8e0653a729b6ef61fc869a05a7))
+
+
+### Code Refactoring
+
+* Add a proper UI and migrate to Vite ([#19](https://github.com/LuanRT/ump-inspector/issues/19)) ([70e9661](https://github.com/LuanRT/ump-inspector/commit/70e9661547f62555828afc2333ec1bcc09af19e0))
+
 ## [1.1.2](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.1...ump-inspector-v1.1.2) (2025-10-05)
 
 
