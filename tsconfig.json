@@ -1,17 +1,26 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "es2022",
     "module": "ESNext",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
     "sourceMap": true,
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
-    "lib": ["DOM", "ES2020"]
+    "lib": [
+      "DOM",
+      "es2022"
+    ],
+    "types": [
+      "chrome"
+    ]
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
 }

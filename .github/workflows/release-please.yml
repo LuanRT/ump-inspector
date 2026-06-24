@@ -39,7 +39,7 @@ jobs:
 
       - name: Zip artifact
         run: |
-          zip -r ${{ steps.release.outputs.tag_name }}.zip dist manifest.json rules.json LICENSE
+          zip -r ${{ steps.release.outputs.tag_name }}.zip dist icons popup.html manifest.json rules.json LICENSE
         if: ${{ steps.release.outputs.release_created }}
 
       - name: Upload artifact to release

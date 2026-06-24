@@ -1,3 +1,5 @@
+import { u8ToBase64 } from "googlevideo/utils";
+
 export function isGoogleVideoRequest(input: string | URL): boolean {
   const url = input.toString();
 
@@ -10,7 +12,7 @@ export function isGoogleVideoRequest(input: string | URL): boolean {
       return true;
     }
   } else if (urlPart.includes('/videoplayback/')) { // For live content, post-live, etc.
-    const pathParts = urlPart.split('/');    return [ 'videoplayback', 'sabr', 'lsig', 'expire' ].some((part) => pathParts.includes(part));
+    const pathParts = urlPart.split('/'); return ['videoplayback', 'sabr', 'lsig', 'expire'].some((part) => pathParts.includes(part));
   } else if (urlPart.includes('/initplayback')) {
     const params = new URLSearchParams(queryPart);
     return params.has('id') || params.has('oeis') || params.has('oavd') || params.has('expire');
@@ -19,59 +21,94 @@ export function isGoogleVideoRequest(input: string | URL): boolean {
   return false;
 }
 
-export function getPalette() {
-  let dark = false;
-
-  try {
-    dark = typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches;
-  } catch { dark = false; }
-
-  if (dark) {
-    return {
-      headerBg: '#1e3a8a',
-      headerFg: '#f1f5f9',
-      payload: '#60a5fa',
-      section: '#34d399',
-      part: '#10b981',
-      mediaGroupBg: '#78350f',
-      mediaGroupBadgeBg: '#f59e0b',
-      mediaGroupBadgeFg: '#1f2937',
-      mediaPart: '#fbbf24',
-      subtle: '#64748b',
-      error: '#f87171'
-    };
-  }
-
-  return {
-    headerBg: '#e0f2fe',
-    headerFg: '#0f172a',
-    payload: '#075985',
-    section: '#047857',
-    part: '#036666',
-    mediaGroupBg: '#fff7ed',
-    mediaGroupBadgeBg: '#fbbf24',
-    mediaGroupBadgeFg: '#3f2d0c',
-    mediaPart: '#c2410c',
-    subtle: '#475569',
-    error: '#b91c1c'
-  };
-}
-
-export function logSeparator(colors:  ReturnType<typeof getPalette>, label: string): void {
-  const line = '─'.repeat(34);
-  if (label) {
-    console.log(`%c${line} ${label} ${line}`, `color:${colors.subtle};font-weight:400;font-size:11px;`);
-  } else {
-    console.log(`%c${line}`, `color:${colors.subtle};font-weight:400;font-size:11px;`);
-  }
-}
-
 export function formatSize(bytes: number): string {
   if (bytes === 0) return '0 Bytes';
   const k = 1024;
-  const sizes = [ 'Bytes', 'kB', 'MB' ];
+  const sizes = ['Bytes', 'kB', 'MB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+export function formatTime(ts: number): string {
+  const d = new Date(ts);
+  return d.toLocaleTimeString('en-US', {
+    hour12: false,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+}
+
+function isEmpty(obj: Record<string, unknown>): boolean {
+  for (const prop in obj) {
+    if (Object.hasOwn(obj, prop)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+
+function sanitizeValue(value: unknown): unknown {
+  if (value === null || typeof value !== 'object') {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      value[i] = sanitizeValue(value[i]);
+    }
+    return value;
+  }
+
+  const record = value as Record<string, unknown>;
+
+  // Meaning this is representing a byte array, convert it to base64 for easier display  (todo: maybe find a better way to do this?)
+  if ('0' in record || isEmpty(record)) {
+    return u8ToBase64(new Uint8Array(Object.values(record) as number[]));
+  }
+
+  const keys = Object.keys(record);
+  for (let i = 0; i < keys.length; i++) {
+    const key = keys[i];
+    record[key] = sanitizeValue(record[key]);
+  }
+
+  return record;
+}
+
+export function sanitizeJson(obj: unknown): unknown {
+  try {
+    if (obj === null || typeof obj !== 'object') {
+      return obj;
+    }
+
+    const objMod = obj as Record<string, unknown>;
+    const keys = Object.keys(objMod);
+
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      objMod[key] = sanitizeValue(objMod[key]);
+    }
+
+    return objMod;
+  } catch (err: unknown) {
+    console.error(
+      '%cump-inspector%c - error sanitizing JSON data.',
+      'background-color: #dc3545; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
+      'background-color: transparent; color: inherit;',
+      err
+    );
+    return {};
+  }
+}
+
+export function downloadJson(filename: string, payload: unknown): void {
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
