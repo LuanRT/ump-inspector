@@ -1,5 +1,5 @@
 {
-  "name": "UMP Inspector",
+  "name": "ump-inspector",
   "version": "1.1.2",
   "description": "A browser extension for inspecting UMP requests on YouTube.",
   "scripts": {
