@@ -1,5 +1,5 @@
 import { processUmpResponse } from './processor';
-import { isGoogleVideoRequest } from './helpers';
+import { isGoogleVideoRequest } from '../helpers';
 
 const originalFetch = window.fetch;
 

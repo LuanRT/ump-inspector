@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UMP INSPECTOR</title>
+  <style>
+    :root {
+      --ump-font-mono: 'JetBrains Mono', 'Roboto Mono', 'Cascadia Code', Consolas, Monaco, 'Courier New', monospace;
+      --ump-bg-0: #0b0c0f;
+      --ump-bg-1: #111318;
+      --ump-bg-2: #181b22;
+      --ump-text-0: #f2f5f8;
+      --ump-text-1: #d6dbe3;
+      --ump-text-2: #9da6b5;
+      --ump-text-3: #7a8497;
+      --ump-accent: #58b8ff;
+      --ump-accent-soft: rgba(88, 184, 255, 0.14);
+      --ump-border-0: rgba(255, 255, 255, 0.08);
+      --ump-border-1: rgba(255, 255, 255, 0.12);
+      --ump-border-2: rgba(88, 184, 255, 0.5);
+      --ump-danger: #ff5d72;
+      --ump-panel-glow: rgba(88, 184, 255, 0.08);
+      --ump-surface-subtle: rgba(255, 255, 255, 0.02);
+      --ump-toggle-bg: #1a1e27;
+      --ump-toggle-knob: #bcc5d6;
+      --ump-toggle-on-border: rgba(60, 143, 210, 0.5);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --ump-bg-0: #f6f8fc;
+        --ump-bg-1: #eef3fb;
+        --ump-bg-2: #ffffff;
+        --ump-text-0: #17202f;
+        --ump-text-1: #2c3a4e;
+        --ump-text-2: #4a5b74;
+        --ump-text-3: #667993;
+        --ump-accent: #1f6fe5;
+        --ump-accent-soft: rgba(31, 111, 229, 0.12);
+        --ump-border-0: rgba(18, 33, 56, 0.14);
+        --ump-border-1: rgba(18, 33, 56, 0.2);
+        --ump-border-2: rgba(31, 111, 229, 0.42);
+        --ump-danger: #cc3247;
+        --ump-panel-glow: rgba(31, 111, 229, 0.1);
+        --ump-surface-subtle: rgba(255, 255, 255, 0.72);
+        --ump-toggle-bg: #d8e3f4;
+        --ump-toggle-knob: #ffffff;
+        --ump-toggle-on-border: rgba(31, 111, 229, 0.5);
+      }
+
+      body {
+        color-scheme: light;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: block;
+      width: 380px;
+      margin: 0;
+      padding: 0;
+      font-family: var(--ump-font-mono);
+      color: var(--ump-text-0);
+      background:
+        radial-gradient(900px 380px at 120% -20%, var(--ump-panel-glow) 0%, rgba(88, 184, 255, 0) 55%),
+        linear-gradient(180deg, var(--ump-bg-1) 0%, var(--ump-bg-0) 100%);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color-scheme: dark;
+    }
+
+    .header {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 14px 14px 12px;
+      border-bottom: 1px solid var(--ump-border-0);
+      border-top: 1px solid var(--ump-border-0);
+      border-right: 1px solid var(--ump-border-0);
+      background: var(--ump-surface-subtle);
+    }
+
+    .title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.015em;
+    }
+
+    .content {
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card {
+      border: 1px solid var(--ump-border-0);
+      border-radius: 8px;
+      background: var(--ump-surface-subtle);
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      color: var(--ump-text-2);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .setting-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .setting-label {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .setting-name {
+      font-size: 12px;
+      color: var(--ump-text-0);
+      font-weight: 600;
+    }
+
+    .setting-help {
+      font-size: 11px;
+      color: var(--ump-text-3);
+      line-height: 1.45;
+    }
+
+    .ump-select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      min-width: 145px;
+      background: var(--ump-bg-2);
+      border: 1px solid var(--ump-border-0);
+      color: var(--ump-text-1);
+      border-radius: 6px;
+      padding: 6px 8px;
+      font-size: 12px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.15s, background 0.15s;
+      background-position: right 6px center;
+      background-size: 16px;
+      /* this is from https://flowbite.com/icons */
+      background-image: url('data:image/svg+xml;utf8,<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"><path stroke="%23c0caf5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 10 4 4 4-4"/></svg>');
+      background-repeat: no-repeat;
+    }
+
+    .ump-select:focus {
+      border-color: var(--ump-border-2);
+    }
+
+    .toggle {
+      width: 44px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid var(--ump-border-1);
+      background: var(--ump-toggle-bg);
+      appearance: none;
+      position: relative;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+      flex-shrink: 0;
+    }
+
+    .toggle::after {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--ump-toggle-knob);
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.15s ease, background 0.15s;
+    }
+
+    .toggle:checked {
+      background: var(--ump-accent-soft);
+      border-color: var(--ump-toggle-on-border);
+    }
+
+    .toggle:checked::after {
+      background: var(--ump-accent);
+      transform: translateX(20px);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="popup">
+    <header class="header">
+      <span class="title">UMP INSPECTOR</span>
+    </header>
+
+    <main class="content">
+      <section class="card" aria-label="Core settings">
+        <div class="setting-row">
+          <label class="setting-label" for="setting-enabled">
+            <span class="setting-name">Enabled</span>
+            <span class="setting-help">Toggle the in-page panel on or off.</span>
+          </label>
+          <input id="setting-enabled" class="toggle" type="checkbox" aria-label="Enabled">
+        </div>
+      </section>
+
+      <section class="card" aria-label="Default inspector behavior">
+        <span class="card-title">Defaults</span>
+
+        <div class="setting-row">
+          <label class="setting-label" for="setting-endpoint">
+            <span class="setting-name">Endpoint filter</span>
+            <span class="setting-help">Isolate specific playback APIs to reduce noise.</span>
+          </label>
+          <select id="setting-endpoint" class="ump-select" aria-label="Endpoint filter">
+            <option value="all">All endpoints</option>
+            <option value="/videoplayback">/videoplayback</option>
+            <option value="/initplayback">/initplayback</option>
+          </select>
+        </div>
+
+        <div class="setting-row">
+          <label class="setting-label" for="setting-sort">
+            <span class="setting-name">Request sort order</span>
+            <span class="setting-help">Chronological order of requests.</span>
+          </label>
+          <select id="setting-sort" class="ump-select" aria-label="Request sort order">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+          </select>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="dist/popup.bundle.js"></script>
+</body>
+
+</html>
