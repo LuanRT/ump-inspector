@@ -1,19 +1,29 @@
-# ump-inspector
-
-A browser extension for inspecting and debugging UMP requests on YouTube. It hooks into the response processing to provide decoded, human-readable info into the UMP parts as well as request payloads.
+A browser extension that hijacks the `fetch` API to capture UMP requests and responses on YouTube, decodes them, and displays the information in a human readable format.
 
 ## Screenshots
-<img width="682" height="581" alt="Screenshot 2025-09-23 211703" src="https://github.com/user-attachments/assets/7da0980b-23ea-4e8a-b32a-2e1ec481ea7c" />
+
+Settings popup:
+
+| [![Popup](/assets/screenshots/extension-popup.png "Popup")](/assets/screenshots/extension-popup.png) |
+| ---------------------------------------------------------------- |
+
+In-page panel:
+
+| [![Screenshot 1](/assets/screenshots/panel-screenshot-1.png "Screenshot 1")](/assets/screenshots/panel-screenshot-1.png) | [![Screenshot 2](/assets/screenshots/panel-screenshot-2.png "Screenshot 2")](/assets/screenshots/panel-screenshot-2.png) | [![Screenshot 3](/assets/screenshots/panel-screenshot-3.png "Screenshot 3")](/assets/screenshots/panel-screenshot-3.png) |
+| ---------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 
 ## Installation
 
-To install this extension, you need to load it as an unpacked extension in a Chromium-based browser.
+To install this extension, you need to load it as an unpacked extension in your browser.
 
 1.  Download the latest `ump-inspector-vX.X.X.zip` from the [releases page](https://github.com/LuanRT/ump-inspector/releases).
 2.  Unzip the downloaded file.
-3.  Open your browser and navigate to the extensions page (e.g., `chrome://extensions`, `edge://extensions`, or `about:addons` for Mozilla-based browsers).
+3.  Open your browser and navigate to the extensions page:
+    *   **Chrome/Brave:** `chrome://extensions`
+    *   **Edge:** `edge://extensions`
+    *   **Firefox:** `about:debugging#/runtime/this-firefox`
 4.  Enable "Developer mode".
-5.  Click on "Load unpacked" and select the directory where you unzipped the files.
+5.  Click on "Load unpacked" (or "Load Temporary Add-on" in Firefox) and select the directory where you unzipped the files.
 
 ## Building from Source
 
@@ -34,13 +44,11 @@ If you want to build the extension from the source code, follow these steps:
     ```sh
     npm run build
     ```
-    This will create a `dist` directory containing the bundled extension files.
-
-4.  Follow the steps in the [Installation](#installation) section, but select the root directory of the project instead of the unzipped release folder.
+4.  Follow the steps in the Installation section, but select the root directory of the project instead of the unzipped release folder.
 
 ## Usage
 
-After installation, simply navigate to any YouTube page that plays a video. Open your browser's **Developer Tools** (F12 or Ctrl+Shift+I) and select the **Console** tab. The extension will automatically log the decoded payloads and UMP parts as they are received and processed.
+After installation, navigate to any YouTube page that plays a video. A button will appear in the bottom-right corner of the page. Click it to open the in-page panel. To prevent the button and panel from appearing on the page, you can toggle the "Enabled" option in the extension's settings popup.
 
 ## License
 Distributed under the [MIT](./LICENSE) License.
