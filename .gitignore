@@ -72,6 +72,7 @@ bundle/*.js
 bundle/*.cjs
 bundle/*.cjs.*
 deno/
+releases/
 
 # MacOS
 .DS_Store
