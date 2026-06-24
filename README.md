@@ -1,16 +1,10 @@
 A browser extension that hijacks the `fetch` API to capture UMP requests and responses on YouTube, decodes them, and displays the information in a human readable format.
 
-## Screenshots
-
-Settings popup:
-
-| [![Popup](/assets/screenshots/extension-popup.png "Popup")](/assets/screenshots/extension-popup.png) |
-| ---------------------------------------------------------------- |
-
-In-page panel:
-
-| [![Screenshot 1](/assets/screenshots/panel-screenshot-1.png "Screenshot 1")](/assets/screenshots/panel-screenshot-1.png) | [![Screenshot 2](/assets/screenshots/panel-screenshot-2.png "Screenshot 2")](/assets/screenshots/panel-screenshot-2.png) | [![Screenshot 3](/assets/screenshots/panel-screenshot-3.png "Screenshot 3")](/assets/screenshots/panel-screenshot-3.png) |
-| ---------------------------------------------------------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+- [Installation](#installation)
+- [Building from Source](#building-from-source)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [License](#license)
 
 ## Installation
 
@@ -49,6 +43,24 @@ If you want to build the extension from the source code, follow these steps:
 ## Usage
 
 After installation, navigate to any YouTube page that plays a video. A button will appear in the bottom-right corner of the page. Click it to open the in-page panel. To prevent the button and panel from appearing on the page, you can toggle the "Enabled" option in the extension's settings popup.
+
+## Screenshots
+
+Settings popup:
+
+| [![Popup](/assets/screenshots/extension-popup.png "Popup")](/assets/screenshots/extension-popup.png) |
+| ---------------------------------------------------------------- |
+
+In-page panel:
+
+| [![Screenshot 1](/assets/screenshots/panel-screenshot-1.png "Screenshot 1")](/assets/screenshots/panel-screenshot-1.png) |
+| ---------------------------------------------------------------- |
+
+[![Screenshot 2](/assets/screenshots/panel-screenshot-2.png "Screenshot 2")](/assets/screenshots/panel-screenshot-2.png) |
+| ---------------------------------------------------------------- |
+
+[![Screenshot 3](/assets/screenshots/panel-screenshot-3.png "Screenshot 3")](/assets/screenshots/panel-screenshot-3.png) |
+| ---------------------------------------------------------------- |
 
 ## License
 Distributed under the [MIT](./LICENSE) License.
