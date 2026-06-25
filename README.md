@@ -1,4 +1,15 @@
-A browser extension that hijacks the `fetch` API to capture UMP requests and responses on YouTube, decodes them, and displays the information in a human readable format.
+<div align="center">
+  <br/>
+  <a href="https://github.com/LuanRT/ump-inspector">
+    <img src="assets/logo-512.png" alt="UMP Inspector Logo" width="200" />
+  </a>
+  <br/>
+  <br/>
+  <img src="https://img.shields.io/github/v/release/LuanRT/ump-inspector?color=blue" alt="Latest Release" />
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
+</div>
+
+> A browser extension that intercepts the `fetch` API to capture, decode, and display YouTube UMP network traffic in a human-readable format.
 
 - [Installation](#installation)
 - [Building from Source](#building-from-source)
@@ -42,29 +53,28 @@ If you want to build the extension from the source code, follow these steps:
 
 ## Usage
 
-After installation, navigate to any YouTube page that plays a video. A button will appear in the bottom-right corner of the page. Click it to open the in-page panel. To prevent the button and panel from appearing on the page, you can toggle the "Enabled" option in the extension's settings popup.
+1. Open any YouTube video.
+2. Click the button in the bottom-right corner to launch the inspector panel.
+
+**Note:** You can hide the UI at any time by toggling the "Enabled" option in the extension popup.
 
 ## Screenshots
 
-Settings popup:
+<details>
+  <summary><b>Click to expand screenshots</b></summary>
+  <br/>
 
-| [![Popup](/assets/screenshots/extension-popup.png "Popup")](/assets/screenshots/extension-popup.png) |
-| ---------------------------------------------------------------- |
-
-In-page panel:
-
-| [![Screenshot 1](/assets/screenshots/panel-screenshot-1.png "Screenshot 1")](/assets/screenshots/panel-screenshot-1.png) |
-| ---------------------------------------------------------------- |
-
-[![Screenshot 2](/assets/screenshots/panel-screenshot-2.png "Screenshot 2")](/assets/screenshots/panel-screenshot-2.png) |
-| ---------------------------------------------------------------- |
-
-[![Screenshot 3](/assets/screenshots/panel-screenshot-3.png "Screenshot 3")](/assets/screenshots/panel-screenshot-3.png) |
-| ---------------------------------------------------------------- |
+  <div align="center">
+    <img src="/assets/screenshots/extension-popup.png" width="300" alt="Popup" />
+    <br/><br/>
+    <img src="/assets/screenshots/panel-screenshot-1.png" width="80%" alt="Screenshot 1" />
+    <img src="/assets/screenshots/panel-screenshot-2.png" width="80%" alt="Screenshot 2" />
+    <br/><br/>
+    <img src="/assets/screenshots/panel-screenshot-3.png" width="80%" alt="Screenshot 3" />
+  </div>
+</details>
 
 ## License
 Distributed under the [MIT](./LICENSE) License.
 
 <p align="right">
-(<a href="#top">back to top</a>)
-</p>
