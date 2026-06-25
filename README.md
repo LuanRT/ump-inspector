@@ -6,6 +6,7 @@
   <br/>
   <br/>
 
+  [![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Available-blue?logo=googlechrome&logoColor=white)](https://chromewebstore.google.com/detail/ump-inspector/gicfggmiaebepknngjkpdjfdajaijgpd)
   [![NPM](https://img.shields.io/github/v/release/LuanRT/ump-inspector?color=blue)](https://github.com/LuanRT/ump-inspector/releases)
   [![License](https://img.shields.io/github/license/LuanRT/ump-inspector?color=blue)](./LICENSE)
 
@@ -14,6 +15,8 @@
 > A browser extension that intercepts the `fetch` API to capture, decode, and display YouTube UMP network traffic in a human-readable format.
 
 - [Installation](#installation)
+  - [Chrome, Brave, and Edge](#chrome-brave-and-edge)
+  - [Manual Installation (Firefox \& Unpacked)](#manual-installation-firefox--unpacked)
 - [Building from Source](#building-from-source)
 - [Usage](#usage)
 - [Screenshots](#screenshots)
@@ -21,14 +24,18 @@
 
 ## Installation
 
-To install this extension, you need to load it as an unpacked extension in your browser.
+### Chrome, Brave, and Edge
+The easiest way to install the extension is directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/ump-inspector/gicfggmiaebepknngjkpdjfdajaijgpd).
+
+### Manual Installation (Firefox & Unpacked)
+To install this extension on Firefox or load it manually, you need to load it as an unpacked extension:
 
 1.  Download the latest `ump-inspector-vX.X.X.zip` from the [releases page](https://github.com/LuanRT/ump-inspector/releases).
 2.  Unzip the downloaded file.
 3.  Open your browser and navigate to the extensions page:
-    *   **Chrome/Brave:** `chrome://extensions`
-    *   **Edge:** `edge://extensions`
-    *   **Firefox:** `about:debugging#/runtime/this-firefox`
+    * **Chrome/Brave:** `chrome://extensions`
+    * **Edge:** `edge://extensions`
+    * **Firefox:** `about:debugging#/runtime/this-firefox`
 4.  Enable "Developer mode".
 5.  Click on "Load unpacked" (or "Load Temporary Add-on" in Firefox) and select the directory where you unzipped the files.
 
@@ -51,7 +58,7 @@ If you want to build the extension from the source code, follow these steps:
     ```sh
     npm run build
     ```
-4.  Follow the steps in the Installation section, but select the root directory of the project instead of the unzipped release folder.
+4.  Follow the steps in the Manual Installation section, but select the root directory of the project instead of the unzipped release folder.
 
 ## Usage
 
