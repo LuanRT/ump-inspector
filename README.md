@@ -5,8 +5,10 @@
   </a>
   <br/>
   <br/>
-  <img src="https://img.shields.io/github/v/release/LuanRT/ump-inspector?color=blue" alt="Latest Release" />
-  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License" />
+
+  [![NPM](https://img.shields.io/github/v/release/LuanRT/ump-inspector?color=blue)](https://github.com/LuanRT/ump-inspector/releases)
+  [![License](https://img.shields.io/github/license/LuanRT/ump-inspector?color=blue)](./LICENSE)
+
 </div>
 
 > A browser extension that intercepts the `fetch` API to capture, decode, and display YouTube UMP network traffic in a human-readable format.
