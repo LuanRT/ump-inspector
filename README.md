@@ -80,3 +80,5 @@ If you want to build the extension from the source code, follow these steps:
 Distributed under the [MIT](./LICENSE) License.
 
 <p align="right">
+  (<a href="#top">back to top</a>)
+</p>
