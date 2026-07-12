@@ -5,6 +5,7 @@ import type { Part } from 'googlevideo/shared-types';
 import {
   FormatInitializationMetadata,
   FormatSelectionConfig,
+  LiveMetadata,
   MediaHeader,
   NextRequestPolicy,
   OnesieHeader,
@@ -17,6 +18,7 @@ import {
   SabrContextUpdate,
   SabrContextSendingPolicy,
   SabrRedirect,
+  SabrSeek,
   SnackbarMessage,
   StreamProtectionStatus,
   UMPPartId,
@@ -34,6 +36,7 @@ const umpPartHandlers = new Map<UMPPartId, UmpPartHandler>([
   [UMPPartId.NEXT_REQUEST_POLICY, (part: Part) => NextRequestPolicy.decode(part.data.chunks[0])],
   [UMPPartId.SABR_ERROR, (part: Part) => SabrError.decode(part.data.chunks[0])],
   [UMPPartId.SABR_REDIRECT, (part: Part) => SabrRedirect.decode(part.data.chunks[0])],
+  [UMPPartId.SABR_SEEK, (part: Part) => SabrSeek.decode(part.data.chunks[0])],
   [UMPPartId.SABR_CONTEXT_UPDATE, (part: Part) => SabrContextUpdate.decode(part.data.chunks[0])],
   [UMPPartId.SABR_CONTEXT_SENDING_POLICY, (part: Part) => SabrContextSendingPolicy.decode(part.data.chunks[0])],
   [UMPPartId.STREAM_PROTECTION_STATUS, (part: Part) => StreamProtectionStatus.decode(part.data.chunks[0])],
@@ -48,7 +51,8 @@ const umpPartHandlers = new Map<UMPPartId, UmpPartHandler>([
   [UMPPartId.ONESIE_DATA, (part: Part) => ({ size: part.data.getLength() })],
   [UMPPartId.ONESIE_ENCRYPTED_MEDIA, (part: Part) => ({ size: part.data.getLength() })],
   [UMPPartId.SNACKBAR_MESSAGE, (part: Part) => SnackbarMessage.decode(part.data.chunks[0])],
-  [UMPPartId.FORMAT_SELECTION_CONFIG, (part: Part) => FormatSelectionConfig.decode(part.data.chunks[0])]
+  [UMPPartId.FORMAT_SELECTION_CONFIG, (part: Part) => FormatSelectionConfig.decode(part.data.chunks[0])],
+  [UMPPartId.LIVE_METADATA, (part: Part) => LiveMetadata.decode(part.data.chunks[0])]
 ]);
 
 let traceCounter = 0;
