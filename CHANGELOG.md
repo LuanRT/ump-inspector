@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v2.0.0...ump-inspector-v2.1.0) (2026-07-24)
+
+
+### Features
+
+* **capture:** Support `SabrSeek` and `LiveMetadata` protobufs ([#21](https://github.com/LuanRT/ump-inspector/issues/21)) ([746356c](https://github.com/LuanRT/ump-inspector/commit/746356c4f62e933cdc1f616f05e0ad9eeeebc9ce))
+
 ## [2.0.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v1.1.2...ump-inspector-v2.0.0) (2026-06-24)
 
 
