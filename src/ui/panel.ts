@@ -1,5 +1,6 @@
 import { store } from '../state/store';
 import { PANEL_STYLES } from './styles';
+import { sendCommand } from '../bridge';
 import { downloadJson, formatSize, formatTime } from '../helpers';
 import type { EndpointFilter, UmpTrace, UmpTracePart, Segment, UmpTraceJson } from '../types';
 
@@ -18,20 +19,27 @@ import 'prismjs/components/prism-json';
 let hostEl: HTMLDivElement | null = null;
 let shadowRoot: ShadowRoot | null = null;
 
-let panelEl: HTMLElement | null = null;
-let toggleEl: HTMLButtonElement | null = null;
-let toggleBadgeEl: HTMLElement | null = null;
-let traceListEl: HTMLElement | null = null;
-let detailBodyEl: HTMLElement | null = null;
-let detailTitleEl: HTMLElement | null = null;
-let headerBadgeEl: HTMLElement | null = null;
-let btnPauseEl: HTMLButtonElement | null = null;
 let btnClearEl: HTMLButtonElement | null = null;
 let btnCloseEl: HTMLButtonElement | null = null;
-let btnSortEl: HTMLButtonElement | null = null;
-let btnExportEl: HTMLButtonElement | null = null;
+let btnCloseModal: HTMLButtonElement | null = null;
 let btnCopyEl: HTMLButtonElement | null = null;
+let btnExportEl: HTMLButtonElement | null = null;
+let btnMintToken: HTMLButtonElement | null = null;
+let btnOpenModal: HTMLButtonElement | null = null;
+let btnPauseEl: HTMLButtonElement | null = null;
+let btnSortEl: HTMLButtonElement | null = null;
+let contentBindingInputEl: HTMLInputElement | null = null;
+let detailBodyEl: HTMLElement | null = null;
+let detailTitleEl: HTMLElement | null = null;
 let endpointSelectEl: HTMLSelectElement | null = null;
+let mintColdStartTokensInputEl: HTMLInputElement | null = null;
+let mintErrorTokensInputEl: HTMLInputElement | null = null;
+let panelEl: HTMLElement | null = null;
+let requestNumBadgeEl: HTMLElement | null = null;
+let toggleBadgeEl: HTMLElement | null = null;
+let toggleEl: HTMLButtonElement | null = null;
+let traceListEl: HTMLElement | null = null;
+let webPoOutputEl: HTMLTextAreaElement | null = null;
 
 let panelVisible = false;
 let unsubscribe: (() => void) | null = null;
@@ -101,6 +109,12 @@ const EXPORT_ICON = `
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v12m0 0 4-4m-4 4-4-4M4 16v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2"/>
 </svg>
 `;
+
+const SHIELD_ICON = `
+<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
+  <path d="M12.356 3.066a1 1 0 0 0-.712 0l-7 2.666A1 1 0 0 0 4 6.68a17.695 17.695 0 0 0 2.022 7.98 17.405 17.405 0 0 0 5.403 6.158 1 1 0 0 0 1.15 0 17.406 17.406 0 0 0 5.402-6.157A17.694 17.694 0 0 0 20 6.68a1 1 0 0 0-.644-.949l-7-2.666Z"/>
+</svg>
+`;
 //#endregion
 
 let renderedDetailTraceId: string | null = null;
@@ -130,6 +144,59 @@ function el<K extends keyof HTMLElementTagNameMap>(
 function buildSkeleton(): HTMLElement {
   const root = el('div');
   root.innerHTML = `
+    <!-- webpo client modal -->
+    <div id="webpoc-modal" class="modal">
+      <div class="modal-content">
+        <header class="modal-header">
+          <div class="modal-header-title">
+            <h2>WEBPO CLIENT</h2>
+            <p>Mint WebPO (Proof-of-Origin) tokens with a custom content binding</p>
+          </div>
+          <button class="modal-close-btn">${CLOSE_ICON}</button>
+        </header>
+        <div class="modal-body">
+          <section class="modal-section" aria-label="Content binding">
+            <label class="modal-label" for="webpoc-content-binding">Content binding</label>
+            <input
+              id="webpoc-content-binding"
+              class="modal-input"
+              type="text"
+              placeholder="Video ID, Visitor ID, or DataSync ID"
+              autocomplete="off"
+              spellcheck="false"
+            >
+          </section>
+
+          <section class="modal-section" aria-label="Options">
+            <span class="modal-label">Options</span>
+            <label class="modal-setting-row" for="webpoc-mint-error-tokens">
+              <span class="modal-setting-label">
+                <span class="modal-setting-title">Mint error tokens</span>
+                <span class="modal-setting-help">Mint error tokens if something goes wrong.</span>
+              </span>
+              <input id="webpoc-mint-error-tokens" class="modal-toggle" type="checkbox">
+            </label>
+            <label class="modal-setting-row" for="webpoc-mint-cold-start-tokens">
+              <span class="modal-setting-label">
+                <span class="modal-setting-title">Mint cold start tokens</span>
+                <span class="modal-setting-help">Mint cold start tokens if BotGuard isn't ready.</span>
+              </span>
+              <input id="webpoc-mint-cold-start-tokens" class="modal-toggle" type="checkbox">
+            </label>
+          </section>
+
+          <section class="modal-actions" aria-label="Actions & Output">
+            <button type="button" class="ump-btn modal-primary-button" id="webpoc-mint-token" aria-label="Mint">Mint</button>
+            <div class="output-container" aria-live="polite">
+              <span class="output-label">Output</span>
+              <textarea id="webpo-output" class="output-value"></textarea>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+
+    <!-- inspector panel -->
     <button class="ump-toggle" id="ump-toggle" title="Toggle UMP INSPECTOR" aria-label="Toggle UMP INSPECTOR">
       ${SIDEBAR_ICON}
       <span class="ump-toggle-label">UMP</span>
@@ -139,8 +206,8 @@ function buildSkeleton(): HTMLElement {
     <div class="ump-panel" id="ump-panel" role="complementary" aria-label="UMP INSPECTOR">
       <div class="ump-header">
         <span class="ump-header-title">UMP INSPECTOR</span>
-        <span class="ump-header-badge" id="ump-header-badge">0 requests</span>
         <div class="ump-header-actions">
+          <button class="ump-btn header-actions" id="ump-btn-webpo" title="Open WebPO client">${SHIELD_ICON}</button>
           <button class="ump-btn header-actions sort-order-arrow" id="ump-btn-sort" title="Toggle sort order">${SORT_ICON}</button>
           <button class="ump-btn header-actions" id="ump-btn-pause" title="Pause capture">${UNPAUSED_ICON}</button>
           <button class="ump-btn header-actions" id="ump-btn-clear" title="Clear traces">${CLEAR_ICON}</button>
@@ -154,6 +221,7 @@ function buildSkeleton(): HTMLElement {
           <option value="/videoplayback">/videoplayback</option>
           <option value="/initplayback">/initplayback</option>
         </select>
+        <span class="ump-req-number-badge" id="ump-req-number-badge">0</span>
       </div>
 
       <div class="ump-trace-list" id="ump-trace-list" role="list"></div>
@@ -171,6 +239,11 @@ function buildSkeleton(): HTMLElement {
     </div>
   `;
   return root;
+}
+
+function suppressKeyboardShortcuts(event: KeyboardEvent): void {
+  event.stopPropagation();
+  event.stopImmediatePropagation();
 }
 
 function renderText(str: string): Text {
@@ -210,6 +283,39 @@ function copySelectedTrace(): void {
       }
     });
   } catch { /* no-op (Clipboard API may not be available) */ }
+}
+
+async function mintWebPoToken(): Promise<void> {
+  if (!webPoOutputEl) return;
+
+  const contentBinding = contentBindingInputEl?.value || '';
+  const mintErrorTokens = mintErrorTokensInputEl?.checked || false;
+  const mintColdStartTokens = mintColdStartTokensInputEl?.checked || false;
+
+  if (!contentBinding) {
+    webPoOutputEl.value = 'Content binding is required.';
+    return;
+  }
+
+  const webPoClientPresent = await sendCommand('content', 'webpo-client-presence');
+
+  if (!webPoClientPresent) {
+    webPoOutputEl.value = 'Could not find a WebPO client in the page.';
+    return;
+  }
+
+  const response = await sendCommand('content', 'mint-webpo', {
+    contentBinding,
+    mintErrorTokens,
+    mintColdStartTokens
+  });
+
+  if (response.error) {
+    webPoOutputEl.value = response.error;
+    return;
+  }
+
+  webPoOutputEl.value = response.webpo!;
 }
 
 function renderTraceItem(trace: UmpTrace, selectedId: string | null): HTMLElement {
@@ -469,8 +575,8 @@ function updateUI(): void {
   const { traces, paused, sortNewestFirst, selectedTraceId } = store.getState();
   const count = traces.length;
 
-  if (headerBadgeEl) {
-    headerBadgeEl.textContent = count + ' request' + (count !== 1 ? 's' : '');
+  if (requestNumBadgeEl) {
+    requestNumBadgeEl.textContent = String(count);
   }
 
   if (toggleBadgeEl) {
@@ -555,22 +661,35 @@ export function mountPanel(): void {
   shadowRoot.appendChild(skeleton);
 
   // Cache refs.
+  const modal = shadowRoot.getElementById('webpoc-modal') as HTMLElement;
+
   panelEl = shadowRoot.getElementById('ump-panel') as HTMLElement;
   toggleEl = shadowRoot.getElementById('ump-toggle') as HTMLButtonElement;
   toggleBadgeEl = shadowRoot.getElementById('ump-toggle-badge') as HTMLElement;
   traceListEl = shadowRoot.getElementById('ump-trace-list') as HTMLElement;
   detailBodyEl = shadowRoot.getElementById('ump-detail-body') as HTMLElement;
   detailTitleEl = shadowRoot.getElementById('ump-detail-title') as HTMLElement;
-  headerBadgeEl = shadowRoot.getElementById('ump-header-badge') as HTMLElement;
+  requestNumBadgeEl = shadowRoot.getElementById('ump-req-number-badge') as HTMLElement;
   btnPauseEl = shadowRoot.getElementById('ump-btn-pause') as HTMLButtonElement;
   btnClearEl = shadowRoot.getElementById('ump-btn-clear') as HTMLButtonElement;
   btnCloseEl = shadowRoot.getElementById('ump-btn-close') as HTMLButtonElement;
   btnSortEl = shadowRoot.getElementById('ump-btn-sort') as HTMLButtonElement;
   btnCopyEl = shadowRoot.getElementById('ump-btn-detail-copy') as HTMLButtonElement;
   btnExportEl = shadowRoot.getElementById('ump-btn-detail-export') as HTMLButtonElement;
+  btnOpenModal = shadowRoot.getElementById('ump-btn-webpo') as HTMLButtonElement;
+  btnCloseModal = modal?.querySelector('.modal-close-btn') as HTMLButtonElement;
+  btnMintToken = shadowRoot.getElementById('webpoc-mint-token') as HTMLButtonElement;
+  webPoOutputEl = shadowRoot.getElementById('webpo-output') as HTMLTextAreaElement;
   endpointSelectEl = shadowRoot.getElementById('ump-filter-endpoint') as HTMLSelectElement;
+  contentBindingInputEl = shadowRoot?.getElementById('webpoc-content-binding') as HTMLInputElement;
+  mintErrorTokensInputEl = shadowRoot?.getElementById('webpoc-mint-error-tokens') as HTMLInputElement;
+  mintColdStartTokensInputEl = shadowRoot?.getElementById('webpoc-mint-cold-start-tokens') as HTMLInputElement;
 
   //#region Event listeners
+  modal.addEventListener('keydown', suppressKeyboardShortcuts);
+  modal.addEventListener('keypress', suppressKeyboardShortcuts);
+  modal.addEventListener('keyup', suppressKeyboardShortcuts);
+
   toggleEl.addEventListener('click', () => panelVisible ? hidePanel() : showPanel());
   btnCloseEl.addEventListener('click', () => hidePanel());
   btnPauseEl.addEventListener('click', () => store.togglePause());
@@ -578,6 +697,18 @@ export function mountPanel(): void {
   btnSortEl.addEventListener('click', () => store.toggleSortOrder());
   btnExportEl.addEventListener('click', () => exportSelectedTrace());
   btnCopyEl.addEventListener('click', () => copySelectedTrace());
+  btnMintToken.addEventListener('click', () => mintWebPoToken());
+
+  btnOpenModal.addEventListener('click', () => {
+    if (webPoOutputEl) webPoOutputEl.value = '';
+    if (contentBindingInputEl) contentBindingInputEl.value = '';
+    if (mintErrorTokensInputEl) mintErrorTokensInputEl.checked = false;
+    if (mintColdStartTokensInputEl) mintColdStartTokensInputEl.checked = false;
+    modal.style.display = 'flex';
+  });
+
+  btnCloseModal.addEventListener('click', () => modal.style.display = 'none');
+
   endpointSelectEl.addEventListener('change', () => store.setEndpointFilter(endpointSelectEl!.value as EndpointFilter));
   //#endregion
 

@@ -1,7 +1,7 @@
-import { BRIDGE_MESSAGE_TYPE, type BridgeMessage } from './bridge';
-import { loadExtensionSettings, subscribeExtensionSettings } from './state/extension-settings';
 import { store } from './state/store';
+import { loadExtensionSettings, subscribeExtensionSettings } from './state/extension-settings';
 import { mountPanel, unmountPanel } from './ui/panel';
+import { registerCommandHandlers } from './bridge';
 
 let scriptInjected = false;
 let traceListenerAttached = false;
@@ -34,17 +34,10 @@ function injectScript(): void {
 function listenForTraces(): void {
   if (traceListenerAttached) return;
 
-  window.addEventListener('message', (event: MessageEvent) => {
-    if (!extensionEnabled) return;
-    if (event.source !== window) return;
-
-    const msg = event.data as BridgeMessage | undefined;
-    if (
-      msg &&
-      msg.type === BRIDGE_MESSAGE_TYPE &&
-      msg.trace
-    ) {
-      store.addTrace(msg.trace);
+  registerCommandHandlers('content', {
+    'ump-trace': (payload) => {
+      store.addTrace(payload);
+      return true;
     }
   });
 
