@@ -110,9 +110,9 @@ const EXPORT_ICON = `
 </svg>
 `;
 
-const BUG_ICON = `
+const SHIELD_ICON = `
 <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 24 24">
-  <path d="M18 17h-.09c.058-.33.088-.665.09-1v-1h1a1 1 0 0 0 0-2h-1.09a5.97 5.97 0 0 0-.26-1H17a2 2 0 0 0 2-2V8a1 1 0 1 0-2 0v2h-.54a6.239 6.239 0 0 0-.46-.46V8a3.963 3.963 0 0 0-.986-2.6l.693-.693A1 1 0 0 0 16 4V3a1 1 0 1 0-2 0v.586l-.661.661a3.753 3.753 0 0 0-2.678 0L10 3.586V3a1 1 0 1 0-2 0v1a1 1 0 0 0 .293.707l.693.693A3.963 3.963 0 0 0 8 8v1.54a6.239 6.239 0 0 0-.46.46H7V8a1 1 0 0 0-2 0v2a2 2 0 0 0 2 2h-.65a5.97 5.97 0 0 0-.26 1H5a1 1 0 0 0 0 2h1v1a6 6 0 0 0 .09 1H6a2 2 0 0 0-2 2v2a1 1 0 1 0 2 0v-2h.812A6.012 6.012 0 0 0 11 21.907V12a1 1 0 0 1 2 0v9.907A6.011 6.011 0 0 0 17.188 19H18v2a1 1 0 0 0 2 0v-2a2 2 0 0 0-2-2Zm-4-8.65a5.922 5.922 0 0 0-.941-.251l-.111-.017a5.52 5.52 0 0 0-1.9 0l-.111.017A5.925 5.925 0 0 0 10 8.35V8a2 2 0 1 1 4 0v.35Z"/>
+  <path d="M12.356 3.066a1 1 0 0 0-.712 0l-7 2.666A1 1 0 0 0 4 6.68a17.695 17.695 0 0 0 2.022 7.98 17.405 17.405 0 0 0 5.403 6.158 1 1 0 0 0 1.15 0 17.406 17.406 0 0 0 5.402-6.157A17.694 17.694 0 0 0 20 6.68a1 1 0 0 0-.644-.949l-7-2.666Z"/>
 </svg>
 `;
 //#endregion
@@ -150,6 +150,7 @@ function buildSkeleton(): HTMLElement {
         <header class="modal-header">
           <div class="modal-header-title">
             <h2>WEBPO CLIENT</h2>
+            <p>Mint WebPO (Proof-of-Origin) tokens with a custom content binding</p>
           </div>
           <button class="modal-close-btn">${CLOSE_ICON}</button>
         </header>
@@ -206,7 +207,7 @@ function buildSkeleton(): HTMLElement {
       <div class="ump-header">
         <span class="ump-header-title">UMP INSPECTOR</span>
         <div class="ump-header-actions">
-          <button class="ump-btn header-actions" id="ump-btn-webpo" title="Open WebPO client">${BUG_ICON}</button>
+          <button class="ump-btn header-actions" id="ump-btn-webpo" title="Open WebPO client">${SHIELD_ICON}</button>
           <button class="ump-btn header-actions sort-order-arrow" id="ump-btn-sort" title="Toggle sort order">${SORT_ICON}</button>
           <button class="ump-btn header-actions" id="ump-btn-pause" title="Pause capture">${UNPAUSED_ICON}</button>
           <button class="ump-btn header-actions" id="ump-btn-clear" title="Clear traces">${CLEAR_ICON}</button>

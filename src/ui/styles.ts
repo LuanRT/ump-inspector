@@ -706,6 +706,12 @@ const MODAL_CSS = `
   letter-spacing: 0.02em;
 }
 
+.modal-header p {
+  font-size: 11px;
+  color: var(--ump-text-3);
+  line-height: 1.45;
+}
+
 .modal-body {
   padding: 16px;
   color: var(--ump-text-1);
