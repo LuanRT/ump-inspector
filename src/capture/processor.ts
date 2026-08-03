@@ -1,4 +1,4 @@
-import { UmpReader, CompositeBuffer } from 'googlevideo/ump';
+import { CompositeBuffer, UmpReader } from 'googlevideo/ump';
 import { u8ToBase64 } from 'googlevideo/utils';
 import type { Part } from 'googlevideo/shared-types';
 
@@ -26,7 +26,7 @@ import {
 } from 'googlevideo/protos';
 
 import type { UmpTracePart, Segment } from '../types';
-import { emitTrace } from '../bridge';
+import { sendCommand } from '../bridge';
 import { sanitizeJson } from '../helpers';
 
 type UmpPartHandler = (part: Part) => unknown;
@@ -57,7 +57,7 @@ const umpPartHandlers = new Map<UMPPartId, UmpPartHandler>([
 
 let traceCounter = 0;
 
-export function processUmpResponse(url: string, requestBody: ArrayBuffer, responseBuffer: ArrayBuffer): void {
+export async function processUmpResponse(url: string, requestBody: ArrayBuffer, responseBuffer: ArrayBuffer): Promise<void> {
   try {
     const requestURL = new URL(url);
     const isOnesie = requestURL.pathname === '/initplayback';
@@ -121,7 +121,7 @@ export function processUmpResponse(url: string, requestBody: ArrayBuffer, respon
       if (!parseError) parseError = String(e);
     }
 
-    emitTrace({
+    const response = await sendCommand('injected', 'ump-trace', {
       id: `${Date.now()}-${++traceCounter}`,
       timestamp: Date.now(),
       url,
@@ -134,6 +134,13 @@ export function processUmpResponse(url: string, requestBody: ArrayBuffer, respon
       parseError
     });
 
+    if (!response) {
+      console.error(
+        '%cump-inspector%c - failed to send UMP trace to content script.',
+        'background-color: #dc3545; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold;',
+        'background-color: transparent; color: inherit;'
+      );
+    }
   } catch (error) {
     console.error(
       '%cump-inspector%c - an unexpected error occurred while processing UMP response.',

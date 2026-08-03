@@ -44,6 +44,10 @@ const BASE_CSS = `
   --ump-media-segment-bg: #10151d;
   --ump-muted-strong: #b7c0cd;
   --ump-meta-muted: #666;
+  --ump-toggle-bg: #1a1e27;
+  --ump-toggle-knob: #bcc5d6;
+  --ump-toggle-on-border: rgba(60, 143, 210, 0.5);
+  --modal-code-bg: rgba(255, 255, 255, 0.015);
   font-family: var(--ump-font-mono);
   font-size: 13px;
   line-height: 1.45;
@@ -86,7 +90,7 @@ const BASE_CSS = `
     radial-gradient(1200px 500px at 120% -10%, var(--ump-panel-glow) 0%, rgba(88, 184, 255, 0) 55%),
     linear-gradient(180deg, var(--ump-bg-1) 0%, var(--ump-bg-0) 100%);
   border-left: 1px solid var(--ump-border-0);
-  z-index: 9999;
+  z-index: 99999;
   display: flex;
   flex-direction: column;
   font-size: 12px;
@@ -108,14 +112,14 @@ const BASE_CSS = `
   position: fixed;
   bottom: 80px;
   right: 20px;
-  z-index: 9998;
+  z-index: 99998;
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 14px;
+  padding: 8px 8px;
   background: var(--ump-toggle-bg);
   border: 1px solid var(--ump-border-1);
-  border-radius: 24px;
+  border-radius: 12px;
   cursor: pointer;
   color: var(--ump-text-0);
   font-size: 12px;
@@ -223,17 +227,6 @@ const HEADER_CSS = `
   letter-spacing: 0.015em;
 }
 
-.ump-header-badge {
-  background: var(--ump-accent-soft);
-  color: var(--ump-accent);
-  border: 1px solid rgba(88, 184, 255, 0.28);
-  border-radius: 20px;
-  padding: 3px 8px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.01em;
-}
-
 .ump-header-actions {
   display: flex;    
   gap: 8px;
@@ -258,6 +251,7 @@ const FILTER_BAR_CSS = `
 .ump-filters {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 6px;
   padding: 8px 10px;
   background: var(--ump-surface-faint);
@@ -289,6 +283,17 @@ const FILTER_BAR_CSS = `
 
 .ump-select:focus {
   border-color: var(--ump-border-2);
+}
+
+.ump-req-number-badge {
+  background: var(--ump-accent-soft);
+  color: var(--ump-accent);
+  border: 1px solid rgba(88, 184, 255, 0.28);
+  border-radius: 5px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 `;
 
@@ -629,6 +634,274 @@ const DETAIL_PANE_CSS = `
 }
 `;
 
+const MODAL_CSS = `
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  overflow: auto;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  animation: fadeIn 0.18s ease-out;
+}
+
+.modal-content {
+  width: min(520px, 100%);
+  max-height: min(80vh, 760px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: radial-gradient(900px 380px at 120% -20%, var(--ump-panel-glow) 0%, rgba(88, 184, 255, 0) 55%),
+        linear-gradient(180deg, var(--ump-bg-1) 0%, var(--ump-bg-0) 100%);
+  color: var(--ump-text-0);
+  border: 1px solid var(--ump-border-0);
+  border-radius: 10px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  animation: modalPop 0.18s ease-out;
+}
+
+.modal-close-btn {
+  all: unset;
+  color: var(--ump-text-1);
+  font-size: 24px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: 600;
+  line-height: 1;
+  transition: color 0.12s, color 0.12s, border-color 0.12s;
+  flex-shrink: 0;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+  color: var(--ump-text-0);
+  transform: scale(1.05);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--ump-surface-subtle);
+  border-bottom: 1px solid var(--ump-border-0);
+  color: var(--ump-text-0);
+}
+
+.modal-header-title {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.modal-header h2 {
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.modal-body {
+  padding: 16px;
+  color: var(--ump-text-1);
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.modal-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ump-text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.modal-input {
+  width: 100%;
+  border: 1px solid var(--ump-border-0);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--ump-text-0);
+  background: var(--ump-surface-subtle);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.modal-input::placeholder {
+  color: var(--ump-text-3);
+}
+
+.modal-input:focus {
+  border-color: var(--ump-border-2);
+  box-shadow: 0 0 0 3px var(--ump-accent-soft);
+}
+
+.modal-setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--ump-border-0);
+  border-radius: 8px;
+  background: var(--ump-surface-subtle);
+  cursor: pointer;
+}
+
+.modal-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 999px;
+  border: 1px solid var(--ump-border-1);
+  background: var(--ump-toggle-bg);
+  appearance: none;
+  position: relative;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.modal-toggle::after {
+  content: '';
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ump-toggle-knob);
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.15s ease, background 0.15s;
+}
+
+.modal-toggle:checked {
+  background: var(--ump-accent-soft);
+  border-color: var(--ump-toggle-on-border);
+}
+
+.modal-toggle:checked::after {
+  background: var(--ump-accent);
+  transform: translateX(20px);
+}
+
+.modal-setting-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.modal-setting-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ump-text-0);
+}
+
+.modal-setting-help {
+  font-size: 11px;
+  color: var(--ump-text-3);
+  line-height: 1.45;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  padding: 2px;
+  gap: 10px;
+}
+
+.ump-btn.modal-primary-button {
+  min-width: 92px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border-color: var(--ump-border-0);
+  background: var(--ump-surface-subtle);
+  color: var(--ump-text-1);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.ump-btn.modal-primary-button:hover {
+  background: var(--ump-item-hover);
+  border-color: rgba(88, 184, 255, 0.35);
+  color: var(--ump-text-0);
+}
+
+.ump-btn.modal-primary-button:active {
+  transform: translateY(1px);
+}
+
+.output-container {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px 10px;
+  border: 1px solid var(--ump-border-0);
+  height: 71px;
+  border-radius: 8px;
+  background: var(--modal-code-bg);
+}
+
+.output-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ump-text-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.output-value {
+  all: unset;
+  font-size: 11px;
+  color: var(--ump-text-1);
+  line-height: 1.55;
+  word-break: break-word;
+}
+
+@media (max-width: 560px) {
+  .modal-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .ump-btn.modal-primary-button {
+    width: 100%;
+    height: 36px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+`;
+
 const LIGHT_THEME_CSS = `
 @media (prefers-color-scheme: light) {
   :host {
@@ -666,6 +939,10 @@ const LIGHT_THEME_CSS = `
     --ump-media-segment-bg: #f4f8ff;
     --ump-muted-strong: #3a4b63;
     --ump-meta-muted: #5f6f84;
+    --ump-toggle-bg: #d8e3f4;
+    --ump-toggle-knob: #ffffff;
+    --ump-toggle-on-border: rgba(31, 111, 229, 0.5);
+    --modal-code-bg: transparent;
     color-scheme: light;
   }
 
@@ -729,4 +1006,4 @@ const LIGHT_THEME_CSS = `
 }
 `;
 
-export const PANEL_STYLES = [BASE_CSS, HEADER_CSS, FILTER_BAR_CSS, TRACE_LIST_CSS, DETAIL_PANE_CSS, LIGHT_THEME_CSS].join('\n');
+export const PANEL_STYLES = [BASE_CSS, HEADER_CSS, FILTER_BAR_CSS, TRACE_LIST_CSS, DETAIL_PANE_CSS, MODAL_CSS, LIGHT_THEME_CSS].join('\n');
