@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v2.1.0...ump-inspector-v2.2.0) (2026-08-03)
+
+
+### Features
+
+* **panel:** Add WebPO client UI ([#25](https://github.com/LuanRT/ump-inspector/issues/25)) ([d293d15](https://github.com/LuanRT/ump-inspector/commit/d293d15ba894b13f4dc702c014ef00d2cd8617ba))
+
 ## [2.1.0](https://github.com/LuanRT/ump-inspector/compare/ump-inspector-v2.0.0...ump-inspector-v2.1.0) (2026-07-24)
 
 
