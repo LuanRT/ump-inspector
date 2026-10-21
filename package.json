@@ -31,7 +31,7 @@
     "globals": "^17.6.0",
     "typescript": "^5.3.3",
     "typescript-eslint": "^8.61.1",
-    "vite": "^8.0.16"
+    "vite": "^8.1.6"
   },
   "dependencies": {
     "googlevideo": "^4.1.1",
